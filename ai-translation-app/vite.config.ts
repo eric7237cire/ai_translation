@@ -3,6 +3,8 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vite.dev/config/
 export default defineConfig({
-	base: '/ai-translation/',
+  //See public base path in vite guide
+	base: './',
+  
   plugins: [vue()],
 })
