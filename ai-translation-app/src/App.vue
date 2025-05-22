@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import Translate from './components/Translate.vue'
 </script>
 
 <template>
   
-  <HelloWorld msg="Vite + Vue" />
+  <Translate msg="Vite + Vue" />
 </template>
 
 <style scoped>
