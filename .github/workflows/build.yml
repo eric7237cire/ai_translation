@@ -1,4 +1,13 @@
-build-and-deploy:
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - initial
+
+jobs:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     permissions:
