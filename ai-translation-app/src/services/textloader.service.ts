@@ -3,7 +3,7 @@ export const ASIMOV_FILE = "asimov.txt";
 
 export class TextLoader {
   static async loadTextFile(fileName: string): Promise<string> {
-    const res = await fetch(`/${fileName}`);
+    const res = await fetch(`./${fileName}`);
     if (!res.ok) {
       throw new Error(`Error al cargar el archivo: ${fileName}`);
     }
