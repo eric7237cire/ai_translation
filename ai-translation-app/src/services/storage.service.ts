@@ -11,7 +11,6 @@ interface TranslationDB extends DBSchema {
     value: {
       english: string;
       spanish: string;
-      timestamp: number;
     };
   };
   meta: {

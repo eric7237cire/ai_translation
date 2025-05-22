@@ -34,9 +34,10 @@ onMounted(async () => {
       }
     }
 
-    currentIndex.value = await storageService.getMeta("currentIndex");
-    if (!_.isNumber(currentIndex.value)) {
-      currentIndex.value = 0;
+    const curIdx = await storageService.getMeta("currentIndex");
+
+    if (_.isNumber(curIdx)) {
+      currentIndex.value = curIdx;
     }
     loadPair();
     //console.log(text);
@@ -67,7 +68,6 @@ watch([english, spanish], ([eng, spa]) => {
   storageService.savePairAtIndex(currentIndex.value, {
     english: eng,
     spanish: spa,
-    timestamp: Date.now(),
   });
 });
 
