@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { usePairs } from "@/composables/pairs";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useSwipe, type UseSwipeDirection } from "@vueuse/core";
 defineProps<{ msg: string }>();
 
 const { english, spanish, prompt, currentIndex, next, prev } = usePairs();
@@ -13,6 +15,34 @@ async function copyToClipboard() {
     alert("Failed to copy: " + err);
   }
 }
+
+// --- Handle swipe using VueUse
+const swipeTarget = ref(null);
+const { direction } = useSwipe(swipeTarget, {
+  threshold: 50,
+});
+
+watch(direction, (dir: UseSwipeDirection) => {
+  if (dir === "left") next();
+  else if (dir === "right") prev();
+});
+
+// --- Keyboard support
+function handleKeydown(e: KeyboardEvent) {
+  if (e.key === "ArrowLeft") {
+    prev();
+  } else if (e.key === "ArrowRight") {
+    next();
+  }
+}
+
+onMounted(() => {
+  window.addEventListener("keydown", handleKeydown);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleKeydown);
+});
 </script>
 
 <template>
@@ -31,7 +61,7 @@ async function copyToClipboard() {
       <textarea id="prompt" v-model="prompt" rows="5"></textarea>
     </div>
 
-    <div class="nav">
+    <div class="nav" ref="swipeTarget">
       <button @click="prev" :disabled="currentIndex <= 0">⬅</button>
       <span>Index: {{ currentIndex }}</span>
       <button @click="next">➡</button>
@@ -55,9 +85,16 @@ async function copyToClipboard() {
 .container {
   max-width: 900px;
   width: 900px;
-  margin: auto;
-  padding: 1rem;
   font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  .container {
+    width: 100vw;
+  }
 }
 h1 {
   text-align: center;
