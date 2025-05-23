@@ -59,9 +59,10 @@ export class StorageService {
     if (!this.db) {
       await this.init();
     }
+    /*
     console.log(
       `Saving pair ${index}  ${pair.english.length}  ${pair.spanish.length}`
-    );
+    );*/
     await this.db!.put(StorageService.PAIRS_STORE_NAME, pair, index);
   }
 
@@ -95,7 +96,7 @@ export class StorageService {
     await this.db!.put(StorageService.META_STORE_NAME, value, key);
   }
 
-  public async exportTranslationDB(): string {
+  public async exportTranslationDB(): Promise<string> {
     if (!this.db) {
       await this.init();
     }

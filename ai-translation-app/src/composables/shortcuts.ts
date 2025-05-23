@@ -18,6 +18,20 @@ export function useShortcuts(next: () => void, prev: () => void) {
 
   // --- Keyboard support
   function handleKeydown(e: KeyboardEvent) {
+    const target = e.target as HTMLElement;
+    //console.log(target.tagName);
+    const isTextInput =
+      target.tagName === "INPUT" &&
+      (target as HTMLInputElement).type === "text";
+    const isTextarea = target.tagName === "TEXTAREA";
+    const isContentEditable = target.isContentEditable;
+
+    if (isTextInput || isTextarea || isContentEditable) {
+      /*console.log(
+        `Not navigating ${isTextInput} ${isTextarea} ${isContentEditable}`
+      );*/
+      return; // Don't navigate
+    }
     if (e.key === "ArrowLeft") {
       prev();
     } else if (e.key === "ArrowRight") {
