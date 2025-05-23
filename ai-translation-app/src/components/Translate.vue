@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { usePairs } from "@/composables/pairs";
-import { onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { useSwipe, type UseSwipeDirection } from "@vueuse/core";
+import { useSaveLoad } from "@/composables/file-save-load";
+import { useShortcuts } from "@/composables/shortcuts";
 defineProps<{ msg: string }>();
 
-const { english, spanish, prompt, currentIndex, next, prev } = usePairs();
+const { english, spanish, prompt, currentIndex, next, prev, storageService } =
+  usePairs();
+const { saveToFile, loadFromFile } = useSaveLoad(storageService);
+useShortcuts(next, prev);
 
 async function copyToClipboard() {
   try {
@@ -15,34 +18,6 @@ async function copyToClipboard() {
     alert("Failed to copy: " + err);
   }
 }
-
-// --- Handle swipe using VueUse
-const swipeTarget = ref(null);
-const { direction } = useSwipe(swipeTarget, {
-  threshold: 50,
-});
-
-watch(direction, (dir: UseSwipeDirection) => {
-  if (dir === "left") next();
-  else if (dir === "right") prev();
-});
-
-// --- Keyboard support
-function handleKeydown(e: KeyboardEvent) {
-  if (e.key === "ArrowLeft") {
-    prev();
-  } else if (e.key === "ArrowRight") {
-    next();
-  }
-}
-
-onMounted(() => {
-  window.addEventListener("keydown", handleKeydown);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("keydown", handleKeydown);
-});
 </script>
 
 <template>
@@ -77,7 +52,12 @@ onBeforeUnmount(() => {
       <textarea id="spanish" v-model="spanish" rows="7"></textarea>
     </div>
 
-    <button @click="copyToClipboard()">Copy</button>
+    <div class="button-bar">
+      <button @click="saveToFile()">Save</button>
+      <!-- <button @click="loadFromFile()">Load</button> -->
+      <input type="file" accept=".json" @change="loadFromFile" />
+      <button @click="copyToClipboard()">Copy</button>
+    </div>
   </div>
 </template>
 

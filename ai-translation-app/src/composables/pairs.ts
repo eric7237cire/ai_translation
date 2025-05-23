@@ -1,5 +1,5 @@
 import { onMounted, ref, watch } from "vue";
-import { IndexedDBService } from "@services/storage.service";
+import { StorageService } from "@services/storage.service";
 import { ASIMOV_FILE, TextLoader } from "@services/textloader.service";
 import { isNumber } from "lodash";
 export function usePairs() {
@@ -15,7 +15,7 @@ export function usePairs() {
 
   const currentIndex = ref(0);
 
-  const storageService = new IndexedDBService();
+  const storageService = new StorageService();
 
   onMounted(async () => {
     try {
@@ -75,5 +75,5 @@ export function usePairs() {
     }
   }
 
-  return { english, spanish, prompt, currentIndex, next, prev };
+  return { english, spanish, prompt, currentIndex, next, prev, storageService };
 }

@@ -1,0 +1,44 @@
+import type { StorageService } from "@/services/storage.service";
+
+export function useSaveLoad(storageService: StorageService) {
+  async function saveToFile() {
+    const jsonString = await storageService.exportTranslationDB();
+    //const jsonString = JSON.stringify(json);
+    console.log(jsonString);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "data.json"; // filename
+    link.click();
+
+    URL.revokeObjectURL(url); // cleanup
+  }
+
+  async function loadFromFile(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      try {
+        const jsonString = reader.result as string;
+        //const json = JSON.parse();
+        //console.log(`Loaded JSON length: ${}:", json);
+        storageService.importTranslationDB(jsonString);
+        // Do something with json...
+      } catch (err) {
+        console.error("Invalid JSON file", err);
+      }
+    };
+
+    reader.readAsText(file);
+  }
+
+  return { saveToFile, loadFromFile };
+}
