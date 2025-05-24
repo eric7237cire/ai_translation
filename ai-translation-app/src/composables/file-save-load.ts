@@ -1,4 +1,4 @@
-import type { StorageService } from "@/services/storage.service";
+import type { StorageService } from "@services/storage.service";
 
 export function useSaveLoad(storageService: StorageService) {
   async function saveToFile() {

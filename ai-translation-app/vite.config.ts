@@ -1,18 +1,19 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
   //See public base path in vite guide
   base: "./",
 
-  plugins: [vue()],
+  plugins: [tailwindcss(), vue()],
 
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
       "@services": path.resolve(__dirname, "./src/services"),
+      "@composables": path.resolve(__dirname, "./src/composables"),
     },
   },
 });

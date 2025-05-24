@@ -13,7 +13,7 @@
 
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"],
+      "@composables/*": ["./src/composables/*"],
       "@services/*": ["./src/services/*"]
     }
   },
