@@ -4,13 +4,31 @@ import { ref } from "vue";
 export function useSaveLoad(storageService: StorageService) {
   const fileInput = ref<HTMLInputElement | null>(null);
 
-  function triggerFile() {
-    fileInput.value?.click();
+  async function triggerFile() {
+    const isFileSystemAPISupported = "showSaveFilePicker" in window;
+
+    if (!isFileSystemAPISupported) {
+      fileInput.value?.click();
+      return;
+    }
+
+    //Android save
+    const handle = await window.showSaveFilePicker({
+      suggestedName: "data.json",
+      types: [
+        { description: "JSON", accept: { "application/json": [".json"] } },
+      ],
+    });
+
+    const writable = await handle.createWritable();
+    const jsonString = await storageService.exportTranslationDB();
+    await writable.write(jsonString);
+    await writable.close();
   }
   async function saveToFile() {
     const jsonString = await storageService.exportTranslationDB();
     //const jsonString = JSON.stringify(json);
-    console.log(jsonString);
+    //console.log(jsonString);
     const blob = new Blob([jsonString], { type: "application/json" });
     const url = URL.createObjectURL(blob);
 
