@@ -4,7 +4,7 @@ import { ref } from "vue";
 export function useSaveLoad(storageService: StorageService) {
   const fileInput = ref<HTMLInputElement | null>(null);
 
-  async function triggerFile() {
+  async function triggerFile(): Promise<void> {
     const isFileSystemAPISupported = "showSaveFilePicker" in window;
 
     if (!isFileSystemAPISupported) {
@@ -12,32 +12,55 @@ export function useSaveLoad(storageService: StorageService) {
       return;
     }
 
-    //Android save
-    const handle = await window.showSaveFilePicker({
-      suggestedName: "data.json",
+    //Android load
+    const [handle] = await window.showOpenFilePicker({
       types: [
-        { description: "JSON", accept: { "application/json": [".json"] } },
+        {
+          description: "application/json",
+          accept: {
+            "application/json": [".json"],
+          },
+        },
       ],
+      multiple: false,
     });
 
-    const writable = await handle.createWritable();
-    const jsonString = await storageService.exportTranslationDB();
-    await writable.write(jsonString);
-    await writable.close();
+    const file = await handle.getFile();
+    const jsonString = await file.text();
+
+    storageService.importTranslationDB(jsonString);
   }
-  async function saveToFile() {
+  async function saveToFile(): Promise<void> {
     const jsonString = await storageService.exportTranslationDB();
-    //const jsonString = JSON.stringify(json);
-    //console.log(jsonString);
-    const blob = new Blob([jsonString], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "data.json"; // filename
-    link.click();
+    const isFileSystemAPISupported = "showSaveFilePicker" in window;
 
-    URL.revokeObjectURL(url); // cleanup
+    if (!isFileSystemAPISupported) {
+      //const jsonString = JSON.stringify(json);
+      //console.log(jsonString);
+      const blob = new Blob([jsonString], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "data.json"; // filename
+      link.click();
+
+      URL.revokeObjectURL(url); // cleanup
+    } else {
+      //Android save
+      const handle = await window.showSaveFilePicker({
+        suggestedName: "data.json",
+        types: [
+          { description: "JSON", accept: { "application/json": [".json"] } },
+        ],
+      });
+
+      const writable = await handle.createWritable();
+      const jsonString = await storageService.exportTranslationDB();
+      await writable.write(jsonString);
+      await writable.close();
+    }
   }
 
   async function loadFromFile(event: Event) {
