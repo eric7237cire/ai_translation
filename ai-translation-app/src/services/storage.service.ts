@@ -1,5 +1,6 @@
 import { openDB, type DBSchema, type IDBPDatabase } from "idb";
 import { isNil } from "lodash";
+import { ref } from "vue";
 
 type MetaStoreMap = {
   maxIndex: number;
@@ -28,6 +29,8 @@ export class StorageService {
     "meta" as const;
   private static DB_VERSION = 1;
   private db: IDBPDatabase<TranslationDB> | null = null;
+  //Used in watchEffect to load on data update
+  public versionTracker = ref(0);
 
   public async init(): Promise<void> {
     if (this.db) {
@@ -50,6 +53,8 @@ export class StorageService {
         },
       }
     );
+
+    this.versionTracker.value += 1;
   }
 
   public async savePairAtIndex(
@@ -152,5 +157,7 @@ export class StorageService {
     }
 
     await tx.done;
+
+    this.versionTracker.value += 1;
   }
 }

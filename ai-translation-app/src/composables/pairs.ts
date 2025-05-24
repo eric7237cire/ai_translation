@@ -1,4 +1,4 @@
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 import { StorageService } from "@services/storage.service";
 import { ASIMOV_FILE, TextLoader } from "@services/textloader.service";
 import { isNumber } from "lodash";
@@ -37,11 +37,17 @@ export function usePairs() {
       if (isNumber(curIdx)) {
         currentIndex.value = curIdx;
       }
-      loadPair();
+      //loadPair();
       //console.log(text);
     } catch (error) {
       console.error("Error al cargar el archivo:", error);
     }
+  });
+
+  watchEffect(() => {
+    const _version = storageService.versionTracker;
+    console.log(`Data changed ${_version.value}`);
+    loadPair();
   });
 
   // 🔄 Cargar datos cuando cambia el índice

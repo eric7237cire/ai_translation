@@ -1,6 +1,12 @@
 import type { StorageService } from "@services/storage.service";
+import { ref } from "vue";
 
 export function useSaveLoad(storageService: StorageService) {
+  const fileInput = ref<HTMLInputElement | null>(null);
+
+  function triggerFile() {
+    fileInput.value?.click();
+  }
   async function saveToFile() {
     const jsonString = await storageService.exportTranslationDB();
     //const jsonString = JSON.stringify(json);
@@ -40,5 +46,5 @@ export function useSaveLoad(storageService: StorageService) {
     reader.readAsText(file);
   }
 
-  return { saveToFile, loadFromFile };
+  return { saveToFile, loadFromFile, triggerFile, fileInput };
 }

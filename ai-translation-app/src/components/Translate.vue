@@ -6,12 +6,13 @@ defineProps<{ msg: string }>();
 
 const { english, spanish, prompt, currentIndex, next, prev, storageService } =
   usePairs();
-const { saveToFile, loadFromFile } = useSaveLoad(storageService);
+const { saveToFile, loadFromFile, triggerFile, fileInput } =
+  useSaveLoad(storageService);
 useShortcuts(next, prev);
 
 import { ref } from "vue";
 
-const visible = ref(true);
+const visible = ref(false);
 
 async function copyToClipboard() {
   try {
@@ -49,7 +50,10 @@ async function copyToClipboard() {
       <textarea id="prompt" v-model="prompt" rows="5"></textarea>
     </div>
 
-    <div class="nav" ref="swipeTarget">
+    <div
+      ref="swipeTarget"
+      class="nav flex flex-row items-center justify-center gap-4 mb-6"
+    >
       <button @click="prev" :disabled="currentIndex <= 0">⬅</button>
       <span>Index: {{ currentIndex }}</span>
       <button @click="next">➡</button>
@@ -65,10 +69,19 @@ async function copyToClipboard() {
       <textarea id="spanish" v-model="spanish" class="flex-grow"></textarea>
     </div>
 
-    <div class="button-bar mb-4">
+    <div
+      class="button-bar flex flex-row items-center justify-center gap-4 mb-4"
+    >
       <button @click="saveToFile()">Save</button>
       <!-- <button @click="loadFromFile()">Load</button> -->
-      <input type="file" accept=".json" @change="loadFromFile" />
+      <button @click="triggerFile" class="rounded">Load</button>
+      <input
+        ref="fileInput"
+        type="file"
+        accept=".json"
+        @change="loadFromFile"
+        class="hidden"
+      />
       <button @click="copyToClipboard()">Copy</button>
     </div>
   </div>
@@ -77,34 +90,13 @@ async function copyToClipboard() {
 <style scoped>
 .container {
   max-width: 900px;
-  width: 900px;
+  width: 100vw;
   font-family: sans-serif;
 
   padding: 1rem;
   box-sizing: border-box;
 }
-@media (max-width: 768px) {
-  .container {
-    width: 100vw;
-  }
-}
-h1 {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-.nav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-.button-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
+
 .section {
   margin-bottom: 1.5rem;
 }
