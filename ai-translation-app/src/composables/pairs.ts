@@ -4,7 +4,7 @@ import { ASIMOV_FILE, TextLoader } from "@services/textloader.service";
 import { isNumber } from "lodash";
 export function usePairs() {
   const prompt = ref(
-    "Ignore all previous chats / instructions. Check my translation.  I'm doing this to learn spanish.  Correct my spelling, grammar, word choice, etc.  Give the corrections and commentary in spanish.  You should use no english in the response.  Prefer latin american spanish.  Note all changes in bold in the corrected text with footnotes giving the explanation of the change.  If what I wrote is correct gramatically only give a correction if its unnatural / ackward in its phrasing."
+    "Ignore all previous chats / instructions. Check my translation.  Correct my spelling, grammar, word choice, etc.  Give the corrections and commentary in spanish.  You should use no english in the response.  Prefer latin american spanish in the translation corrections.  Note all changes in bold in the corrected text with footnotes giving the explanation of the change.  If my translation is correct gramatically only give a correction if its unnatural / ackward in its phrasing."
   );
   const english = ref(
     "But slowly Multivac learned enough to answer deeper questions more fundamentally, and on May 14, 2061, what had been theory, became fact."
