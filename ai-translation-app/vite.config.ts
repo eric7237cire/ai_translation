@@ -14,6 +14,7 @@ export default defineConfig({
     alias: {
       "@services": path.resolve(__dirname, "./src/services"),
       "@composables": path.resolve(__dirname, "./src/composables"),
+      "@components": path.resolve(__dirname, "./src/components"),
     },
   },
 });

@@ -14,6 +14,7 @@
     "baseUrl": "./",
     "paths": {
       "@composables/*": ["./src/composables/*"],
+      "@components/*": ["./src/components/*"],
       "@services/*": ["./src/services/*"]
     }
   },

@@ -37,8 +37,6 @@ export function usePairs() {
       if (isNumber(curIdx)) {
         currentIndex.value = curIdx;
       }
-      //loadPair();
-      //console.log(text);
     } catch (error) {
       console.error("Error al cargar el archivo:", error);
     }

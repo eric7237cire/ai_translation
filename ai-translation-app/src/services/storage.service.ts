@@ -122,6 +122,20 @@ export class StorageService {
     return JSON.stringify(data, null, 2);
   }
 
+  public async getAllPairs(): Promise<Array<TranslationDB["pairs"]["value"]>> {
+    if (!this.db) {
+      await this.init();
+    }
+
+    if (isNil(this.db)) {
+      return [];
+    }
+
+    const pairs = await this.db.getAll(StorageService.PAIRS_STORE_NAME);
+
+    return pairs;
+  }
+
   public async importTranslationDB(json: string) {
     const parsed = JSON.parse(json) as {
       pairs: { english: string; spanish: string }[];

@@ -2,7 +2,7 @@
 import { usePairs } from "@composables/pairs";
 import { useSaveLoad } from "@composables/file-save-load";
 import { useShortcuts } from "@composables/shortcuts";
-defineProps<{ msg: string }>();
+defineProps<{}>();
 
 const { english, spanish, prompt, currentIndex, next, prev, storageService } =
   usePairs();
