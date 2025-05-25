@@ -6,7 +6,7 @@ import Search from "@components/Search.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory("/ai_translation/"),
   routes: [
     { path: "/", component: Translate },
     { path: "/search", component: Search },
