@@ -74,7 +74,23 @@ const filteredResults = computed(() => {
   if (!searchQuery.value) return [];
 
   const query = searchQuery.value.toLowerCase();
-  return items.value.filter((item) => item.text.toLowerCase().includes(query));
+  return items.value
+    .filter((item) => item.text.toLowerCase().includes(query))
+    .map((item) => {
+      //find sentence with item
+      // Find the matching sentence
+      const sentences = item.text.split(/[.!?"]/);
+      const matchingSentences = sentences.filter((sentence) =>
+        sentence.toLowerCase().includes(query)
+      );
+
+      return {
+        ...item,
+        text: matchingSentences.join(" "),
+      };
+
+      //only include that sentence
+    });
 });
 
 // Highlight matching text in results
