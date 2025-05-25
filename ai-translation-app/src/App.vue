@@ -2,9 +2,11 @@
 import DrawerNavigation from "@components/navigation/DrawerNavigation.vue";
 import { mdilHome } from "@mdi/light-js";
 import { mdilMagnify } from "@mdi/light-js";
+import { mdilTooltipText } from "@mdi/light-js";
 const navItems = [
   { name: "Home", path: "/", subtitle: "Main page", icon: mdilHome },
   { name: "Search", path: "/search", subtitle: "Search", icon: mdilMagnify },
+  { name: "Logs", path: "/logs", icon: mdilTooltipText },
 ];
 </script>
 

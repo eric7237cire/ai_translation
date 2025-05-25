@@ -2,15 +2,20 @@
 import { usePairs } from "@composables/pairs";
 import { useSaveLoad } from "@composables/file-save-load";
 import { useShortcuts } from "@composables/shortcuts";
+import { ref } from "vue";
+import { Logger } from "@services/log.service";
+
 defineProps<{}>();
+
+const log = Logger.getInstance();
 
 const { english, spanish, prompt, currentIndex, next, prev, storageService } =
   usePairs();
 const { saveToFile, loadFromFile, triggerFile, fileInput } =
   useSaveLoad(storageService);
-useShortcuts(next, prev);
+const { swipeTarget } = useShortcuts(next, prev);
 
-import { ref } from "vue";
+log.debug("Loading translate");
 
 const visible = ref(false);
 
@@ -26,7 +31,7 @@ async function copyToClipboard() {
 </script>
 
 <template>
-  <div class="container flex flex-col h-full">
+  <div class="container flex flex-col h-full" ref="swipeTarget">
     <button
       @click="visible = !visible"
       class="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
@@ -50,10 +55,7 @@ async function copyToClipboard() {
       <textarea id="prompt" v-model="prompt" rows="5"></textarea>
     </div>
 
-    <div
-      ref="swipeTarget"
-      class="nav flex flex-row items-center justify-center gap-4 mb-6"
-    >
+    <div class="nav flex flex-row items-center justify-center gap-4 mb-6">
       <button @click="prev" :disabled="currentIndex <= 0">⬅</button>
       <span>Index: {{ currentIndex }}</span>
       <button @click="next">➡</button>

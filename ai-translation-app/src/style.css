@@ -23,6 +23,7 @@ body {
 #app {
   max-width: 1280px;
   height: 100vh;
+  /*touch-action: pan-y;*/
 }
 
 @media (prefers-color-scheme: light) {

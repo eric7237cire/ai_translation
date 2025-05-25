@@ -1,20 +1,30 @@
 import { useSwipe, type UseSwipeDirection } from "@vueuse/core";
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
+import { Logger } from "@services/log.service";
 export function useShortcuts(next: () => void, prev: () => void) {
   // --- Handle swipe using VueUse
   const swipeTarget = ref(null);
+  const log = Logger.getInstance();
+
+  //Need to go to system gestures in android
+
   const { direction } = useSwipe(swipeTarget, {
     threshold: 50,
   });
 
   watch(direction, (dir: UseSwipeDirection) => {
+    log.debug(`swipe ${dir}`);
     if (dir === "left") {
       next();
     } else if (dir === "right") {
       prev();
     }
   });
+
+  log.info("Loading shortcuts 2");
+
+  // Register the directive globally in this component
 
   // --- Keyboard support
   function handleKeydown(e: KeyboardEvent) {
@@ -46,4 +56,8 @@ export function useShortcuts(next: () => void, prev: () => void) {
   onBeforeUnmount(() => {
     window.removeEventListener("keydown", handleKeydown);
   });
+
+  return {
+    swipeTarget,
+  };
 }
