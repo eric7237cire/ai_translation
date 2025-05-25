@@ -7,7 +7,9 @@ export class TextLoader {
     if (!res.ok) {
       throw new Error(`Error al cargar el archivo: ${fileName}`);
     }
-    return await res.text();
+    const r = await res.text();
+    //alert(r);
+    return r;
   }
 
   static splitTextIntoParagraphs(

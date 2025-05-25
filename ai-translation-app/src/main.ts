@@ -5,8 +5,11 @@ import Translate from "@components/Translate.vue";
 import Search from "@components/Search.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
+const isProduction = import.meta.env.MODE === "production";
+const basePath = isProduction ? "/ai_translation/" : "/";
+
 const router = createRouter({
-  history: createWebHistory("/ai_translation/"),
+  history: createWebHistory(basePath),
   routes: [
     { path: "/", component: Translate },
     { path: "/search", component: Search },
