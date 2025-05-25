@@ -3,7 +3,6 @@
     <div class="search-box flex-grow-0">
       <input
         v-model="searchQuery"
-        @input="performSearch"
         placeholder="Search..."
         class="search-input"
       />
