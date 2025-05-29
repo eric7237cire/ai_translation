@@ -2,7 +2,7 @@
 import { usePairs } from "@composables/pairs";
 import { useSaveLoad } from "@composables/file-save-load";
 import { useShortcuts } from "@composables/shortcuts";
-import { ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import { Logger } from "@services/log.service";
 
 defineProps<{}>();
@@ -28,6 +28,49 @@ async function copyToClipboard() {
     alert("Failed to copy: " + err);
   }
 }
+
+//detect keyboard
+
+function handleViewportChange() {
+  if (!swipeTarget.value) {
+    log.debug("swipe target is falsy");
+    return;
+  }
+  if (window.visualViewport) {
+    // Use Visual Viewport API for more accurate keyboard detection
+
+    swipeTarget.value.style.height = window.visualViewport.height + "px";
+  } else {
+    // Fallback for browsers without Visual Viewport API
+    //containerHeight.value = window.innerHeight
+    swipeTarget.value.style.height = window.innerHeight + "px";
+  }
+
+  log.debug(
+    `Set swipeTarget.value.style.height=${swipeTarget.value.style.height}.  window.visualViewport.height=${window?.visualViewport?.height} window.innerHeight=${window.innerHeight}`
+  );
+}
+
+onMounted(() => {
+  if (window.visualViewport) {
+    // Modern approach using Visual Viewport API
+    window.visualViewport.addEventListener("resize", handleViewportChange);
+  } else {
+    // Fallback for older browsers
+    window.addEventListener("resize", handleViewportChange);
+  }
+
+  // Initial setup
+  handleViewportChange();
+});
+
+onBeforeUnmount(() => {
+  if (window.visualViewport) {
+    window.visualViewport.removeEventListener("resize", handleViewportChange);
+  } else {
+    window.removeEventListener("resize", handleViewportChange);
+  }
+});
 </script>
 
 <template>
