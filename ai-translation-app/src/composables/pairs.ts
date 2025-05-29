@@ -4,7 +4,7 @@ import { ASIMOV_FILE, TextLoader } from "@services/textloader.service";
 import { isNumber } from "lodash";
 export function usePairs() {
   const prompt = ref(
-    "Ignore all previous attemps/instructions.  Act as if this were a new chat/session.  Check my translation.  Correct my spelling, grammar, word choice, etc.  Give the corrections and commentary in spanish.  You should use no english in the response.  Prefer latin american spanish in the translation corrections.  Note all changes in bold in the corrected text with numbered footnotes giving the explanation of the change directly underneath the line being corrected.  Thus the response should be my spanish text, your corrections, my spanish text, your corrections, then overall commentary. If my translation is correct gramatically only give a correction if its unnatural / ackward in its phrasing."
+    "Act as if this were a new chat/session.  Your answer should be in the form of A) One line of my spanish B) Corrections (prefer latin american spanish, use no english) C) Another line of my spanish D) Corrections E) etc.  Only give comments/corrections on what still needs attention.  "
   );
   const english = ref(
     "But slowly Multivac learned enough to answer deeper questions more fundamentally, and on May 14, 2061, what had been theory, became fact."
